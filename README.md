@@ -1,2 +1,0 @@
-# PracticeReacrJS
-Practice React JS

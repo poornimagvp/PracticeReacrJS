@@ -1,23 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import SeasonsDisplay from './SeasonsDisplay';
+import Spinner from './Spinner';
+import Timeupdate from './TimeUpdate';
 
 class App extends React.Component {
   constructor(props){
     super(props);
 
     this.state = { lat: null, errorMessage: null };
-
-    window.navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({ lat: position.coords.latitude });
-      },
-      err => {
-        this.setState({ errorMessage: err.message });
-      }
-    )
   }
 
   componentDidMount() {
+    window.navigator.geolocation.getCurrentPosition(
+      position => this.setState({ lat: position.coords.latitude }),
+      err => this.setState({ errorMessage: err.message })
+    )
     console.log('My Component was rendered to the screen');
   }
 
@@ -25,17 +23,24 @@ class App extends React.Component {
     console.log('My component was just updated - it re-rendered');
   }
 
-  // render must always be defiened
-  render(){
+  renderContent() {
     if(!this.state.errorMessage && this.state.lat){
-      return <div>Latitude is: {this.state.lat}</div>
+      return <div><SeasonsDisplay lat = {this.state.lat} /></div>
     }
 
     if(!this.state.lat && this.state.errorMessage){
       return <div>Error:: {this.state.errorMessage}</div>
     }
 
-    return <div>loading ... </div>
+    return <Spinner message = "Please accept location request"/>
+  }
+
+  // render must always be defiened
+  render(){
+    console.log('inside render method')
+    return (
+      <div className = 'border red'>{this.renderContent()} <br /> <Timeupdate /></div>
+    )
   }
 }
 
@@ -73,4 +78,23 @@ Life Cycle methods
     - shouldComponentUpdate
     - getDerivedStateFromProps
     - getSnapshotBeforeUpdate
+
+
+  - We can take state from one component and pass it as a prop down to the child component
+
+  - getting current month :: new Date().getMonth()
+
+  - primitive data types are immutable and non primitive data types are muttable
+
+  - Helper function: thats going to contain all the code that is currently inside the render method
+
+  - NOTE:: Don not have multiple return statements inside render method
+
+  - As compared to functional based component, In class-based components, the code is easier to organise.
+
+  - Benefits for Class based components
+    - Easier code orgainsation
+    - Can use State (Easier to handle user input)
+    - Can use lifeCycle methods
+
 */
